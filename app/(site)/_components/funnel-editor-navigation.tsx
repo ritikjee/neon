@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { FocusEventHandler, useEffect } from "react";
+import React, { FocusEventHandler, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
@@ -39,13 +39,11 @@ const FunnelEditorNavigation = ({
 }: Props) => {
   const router = useRouter();
   const { state, dispatch } = useEditor();
+  const [isMounted, setIsMounted] = useState(false);
 
-  //   useEffect(() => {
-  //     dispatch({
-  //       type: "SET_FUNNELPAGE_ID",
-  //       payload: { funnelPageId: funnelPageDetails.id },
-  //     });
-  //   }, [funnelPageDetails]);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleOnBlurTitleChange: FocusEventHandler<HTMLInputElement> = async (
     event
@@ -103,9 +101,9 @@ const FunnelEditorNavigation = ({
     //     description: `Updated a funnel page | ${response?.name}`,
     //     subaccountId: subaccountId,
     //   });
-    //   toast("Success", {
-    //     description: "Saved Editor",
-    //   });
+    toast("Success", {
+      description: "Saved Editor",
+    });
     // } catch (error) {
     //   toast("Oppse!", {
     //     description: "Could not save editor",
@@ -127,70 +125,70 @@ const FunnelEditorNavigation = ({
           </Link>
           <div className="flex flex-col w-full ">
             <Input
-              defaultValue={"alha"}
+              defaultValue={"alpha"}
               className="border-none h-5 m-0 p-0 text-lg"
               onBlur={handleOnBlurTitleChange}
             />
-            {/* <span className="text-sm text-muted-foreground">
-              Path: /{funnelPageDetails.pathName}
-            </span> */}
+            {/* TODO : ADD A PATH TO IT */}
             <span className="text-sm text-muted-foreground">Path: /</span>
           </div>
         </aside>
         <aside>
-          <Tabs
-            defaultValue="Desktop"
-            className="w-fit "
-            value={state.editor.device}
-            onValueChange={(value) => {
-              dispatch({
-                type: "CHANGE_DEVICE",
-                payload: { device: value as DeviceTypes },
-              });
-            }}
-          >
-            <TabsList className="grid w-full grid-cols-3 bg-transparent h-fit">
-              <Tooltip>
-                <TooltipTrigger>
-                  <TabsTrigger
-                    value="Desktop"
-                    className="data-[state=active]:bg-muted w-10 h-10 p-0"
-                  >
-                    <Laptop />
-                  </TabsTrigger>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Desktop</p>
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger>
-                  <TabsTrigger
-                    value="Tablet"
-                    className="w-10 h-10 p-0 data-[state=active]:bg-muted"
-                  >
-                    <Tablet />
-                  </TabsTrigger>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Tablet</p>
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger>
-                  <TabsTrigger
-                    value="Mobile"
-                    className="w-10 h-10 p-0 data-[state=active]:bg-muted"
-                  >
-                    <Smartphone />
-                  </TabsTrigger>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Mobile</p>
-                </TooltipContent>
-              </Tooltip>
-            </TabsList>
-          </Tabs>
+          {isMounted ? (
+            <Tabs
+              defaultValue="Desktop"
+              className="w-fit "
+              value={state.editor.device}
+              onValueChange={(value) => {
+                dispatch({
+                  type: "CHANGE_DEVICE",
+                  payload: { device: value as DeviceTypes },
+                });
+              }}
+            >
+              <TabsList className="grid w-full grid-cols-3 bg-transparent h-fit">
+                <Tooltip>
+                  <TooltipTrigger>
+                    <TabsTrigger
+                      value="Desktop"
+                      className="data-[state=active]:bg-muted w-10 h-10 p-0"
+                    >
+                      <Laptop />
+                    </TabsTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Desktop</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <TabsTrigger
+                      value="Tablet"
+                      className="w-10 h-10 p-0 data-[state=active]:bg-muted"
+                    >
+                      <Tablet />
+                    </TabsTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Tablet</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <TabsTrigger
+                      value="Mobile"
+                      className="w-10 h-10 p-0 data-[state=active]:bg-muted"
+                    >
+                      <Smartphone />
+                    </TabsTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Mobile</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TabsList>
+            </Tabs>
+          ) : null}
         </aside>
         <aside className="flex items-center gap-2">
           <Button
